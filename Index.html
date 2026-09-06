@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Arch - Secured Trading Terminal</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background-color: #0b1511; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+        
+        /* 1. LOGIN SCREEN STYLING */
+        #login-screen { background: #070d0b; border: 2px solid #00ff88; border-radius: 20px; padding: 30px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 0 20px rgba(0, 255, 136, 0.1); }
+        .logo-icon { font-size: 40px; color: #00ff88; margin-bottom: 15px; }
+        h2 { font-size: 26px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; color: #ffffff; }
+        p.subtitle { color: #889990; font-size: 14px; margin-bottom: 30px; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; font-size: 12px; text-transform: uppercase; color: #00ff88; margin-bottom: 8px; letter-spacing: 0.5px; }
+        input { width: 100%; background: #0e1a15; border: 1px solid #1c3329; border-radius: 10px; padding: 15px; color: #ffffff; font-size: 16px; outline: none; }
+        input:focus { border-color: #00ff88; }
+        .btn-login { width: 100%; background: linear-gradient(90deg, #00ff88, #00cc6c); border: none; border-radius: 10px; padding: 15px; color: #070d0b; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; text-transform: uppercase; }
+        .options { margin-top: 25px; display: flex; flex-direction: column; gap: 12px; }
+        .options a { color: #889990; text-decoration: none; font-size: 14px; }
+        .options a:hover { color: #00ff88; }
+        .footer-text { margin-top: 30px; font-size: 12px; color: #446655; }
+
+        /* 2. DASHBOARD SCREEN STYLING (HIDDEN BY DEFAULT) */
+        #dashboard-screen { display: none; width: 100%; max-width: 600px; padding-bottom: 90px; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: #070d0b; border: 1px solid #1c3329; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+        .logo-text { font-weight: bold; color: #ffffff; font-size: 18px; letter-spacing: 0.5px; }
+        .wallet-box { background: #0e1a15; padding: 8px 15px; border-radius: 8px; border: 1px solid #00ff88; color: #00ff88; font-weight: bold; }
+        .alert-box { background: #070d0b; border: 1px solid #ffaa00; padding: 12px; border-radius: 10px; margin-bottom: 20px; font-size: 13px; color: #ffaa00; text-align: center; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: #070d0b; border: 1px solid #1c3329; padding: 15px; border-radius: 10px; text-align: center; }
+        .stat-val { font-size: 18px; font-weight: bold; color: #00ff88; margin-top: 5px; }
+        h3.section-title { color: #889990; font-size: 14px; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        .nodes-container { display: flex; flex-direction: column; gap: 15px; }
+        .node-card { background: #070d0b; border: 2px solid #1c3329; border-radius: 15px; padding: 20px; }
+        .node-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .coin-name { font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .coin-tag { background: rgba(0, 255, 136, 0.1); color: #00ff88; font-size: 11px; padding: 3px 8px; border-radius: 5px; }
+        .returns-box { text-align: center; margin: 15px 0; background: #0e1a15; padding: 15px; border-radius: 10px; }
+        .returns-title { font-size: 12px; color: #889990; text-transform: uppercase; }
+        .returns-amount { font-size: 28px; font-weight: bold; color: #00ff88; margin-top: 5px; }
+        .pool-info { display: flex; justify-content: space-between; font-size: 13px; color: #889990; margin-bottom: 15px; }
+        .btn-invest { width: 100%; background: linear-gradient(90deg, #00ff88, #00cc6c); border: none; border-radius: 10px; padding: 12px; color: #070d0b; font-weight: bold; font-size: 15px; cursor: pointer; text-transform: uppercase; }
+        .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #070d0b; border-top: 2px solid #00ff88; padding: 12px; display: flex; justify-content: space-around; align-items: center; text-align: center; z-index: 100; }
+        .timer-text { font-size: 12px; color: #889990; }
+        .timer-clock { font-size: 16px; font-weight: bold; color: #ffaa00; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. BUSINESS ARCH LOGIN SCREEN -->
+    <div id="login-screen">
+        <div class="logo-icon">🚀</div>
+        <h2>Business Arch</h2>
+        <p class="subtitle">Access your Business Arch node account securely.</p>
+        
+        <div class="input-group">
+            <label>Username</label>
+            <input type="text" placeholder="Enter username" id="username" value="admin">
+        </div>
+        
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" placeholder="Enter password" id="password" value="12345">
+        </div>
+        
+        <button class="btn-login" onclick="switchToDashboard()">🔒 Login Terminal</button>
+        
+        <div class="options">
+            <a href="#">👤 Open Corporate Node</a>
+            <a href="#">🔑 Reset Token Key</a>
+        </div>
+        <p class="footer-text">🔒 Connection is protected by Business Arch pipeline security</p>
+    </div>
+
+    <!-- 2. BUSINESS ARCH LIVE TERMINAL DASHBOARD -->
+    <div id="dashboard-screen">
+        <div class="header">
+            <div class="logo-text">🚀 Business Arch Terminal</div>
+            <div class="wallet-box">Rs <span id="user-balance">1000</span></div>
+        </div>
+
+        <div class="alert-box">
+            ⚠️ Important Announcement: Please Humara Official Channel Follow Karein!
+        </div>
+
+        <h3 class="section-title">Corporate Profit Pipeline</h3>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div>Admin Pipeline Reserve</div>
+                <div class="stat-val">Rs <span id="admin-vault">0</span></div>
+            </div>
+            <div class="stat-card">
+                <div>PKR Node Status</div>
+                <div class="stat-val" style="color: #00ff88;">Stable Runtime</div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Active Network Asset Nodes</h3>
+        <div class="nodes-container">
+            <!-- Bitcoin Card -->
+            <div class="node-card">
+                <div class="node-header">
+                    <div class="coin-name">🔶 Bitcoin <span class="coin-tag">BTC Node</span></div>
+                </div>
+                <div class="returns-box">
+                    <div class="returns-title">Total Active Investment Pool</div>
+                    <div class="returns-amount">Rs <span id="pool-btc">30000</span></div>
+                </div>
+                <div class="pool-info">
+                    <span>Testing Allocation: 0.0250</span>
+                    <span>Status: <span style="color:#ffaa00;">High Volume</span></span>
+                </div>
+                <button class="btn-invest" onclick="investFake('btc', 5000)">Invest Rs 5,000</button>
+            </div>
+
+            <!-- Solana Card -->
+            <div class="node-card">
+                <div class="node-header">
+                    <div class="coin-name">🔮 Solana <span class="coin-tag">SOL Node</span></div>
+                </div>
+                <div class="returns-box">
+                    <div class="returns-title">Total Active Investment Pool</div>
+                    <div class="returns-amount">Rs <span id="pool-sol">10000</span></div>
+                </div>
+                <div class="pool-info">
+                    <span>Testing Allocation: 3.8000</span>
+                    <span>Status: <span style="color:#00ff88;">Optimal Balance</span></span>
+                </div>
+                <button class="btn-invest" onclick="investFake('sol', 5000)">Invest Rs 5,000</button>
+            </div>
+        </div>
+
+        <!-- Fixed Bottom Control Bar -->
+        <div class="bottom-bar">
+            <div>
+                <div class="timer-text">Next Automatic Payout Split In:</div>
+                <div class="timer-clock" id="countdown-timer">00:15</div>
+            </div>
+            <button class="btn-invest" style="width: auto; padding: 8px 20px; background: #00ff88; color: #070d0b;" onclick="triggerInverseLogic()">Force Run Split</button>
+        </div>
+    </div>
+
+<script>
+    let userBalance = 1000;
+    let adminVault = 0;
+    let btcPool = 30000;
+    let solPool = 10000;
+
+    // Login Bypass Fixed Script
